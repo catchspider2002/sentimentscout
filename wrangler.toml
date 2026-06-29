@@ -1,0 +1,21 @@
+name = "sentimentscout"
+main = "src/worker.ts"
+compatibility_date = "2026-01-01"
+
+# Secrets (never commit) — set with:
+#   wrangler secret put TXLINE_API_KEY
+#   wrangler secret put ANTHROPIC_API_KEY   # for the Claude sentiment analysis
+# (No Container — a 15-minute cron runs the pre-match pipeline + post-match scorer.
+#  News via Google News RSS and Reddit JSON need no keys.)
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[triggers]
+crons = ["*/15 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sentimentscout"
+database_id = "d4e8fe03-3591-4503-8bf9-58218d6f0db8"   # run: wrangler d1 create sentimentscout
