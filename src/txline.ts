@@ -1,4 +1,4 @@
-// SentimentScout — TxLINE client: auth + fixtures + opening odds + result.
+// SentimentScout - TxLINE client: auth + fixtures + opening odds + result.
 const BASE = 'https://txline.txodds.com';
 export interface TxEnv { DB: D1Database; TXLINE_API_KEY?: string }
 
@@ -22,7 +22,7 @@ async function authedGet(env: TxEnv, path: string): Promise<Response> {
 
 export interface TxFixture { fixtureId: number; competition: string; startTime: number; home: string; away: string; }
 
-// Keep ONLY the senior men's FIFA World Cup 2026 — excludes qualifiers, youth (U-17/U-20),
+// Keep ONLY the senior men's FIFA World Cup 2026 - excludes qualifiers, youth (U-17/U-20),
 // women's, Club World Cup, beach/futsal/esports, and any other edition/year.
 function isMainWorldCup(name: string): boolean {
   const s = (name || '').toLowerCase();

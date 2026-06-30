@@ -1,4 +1,4 @@
-// SentimentScout — sentiment collection (server-side, no CORS issues).
+// SentimentScout - sentiment collection (server-side, no CORS issues).
 // Google News RSS (no key) + Reddit JSON. Twitter is intentionally skipped (API friction).
 
 export interface Sentiment { newsHeadlines: string[]; redditPosts: string[]; sources: number; }

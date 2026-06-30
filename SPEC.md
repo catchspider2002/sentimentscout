@@ -1,11 +1,11 @@
-# SentimentScout — Pre-Match Sentiment Agent
+# SentimentScout - Pre-Match Sentiment Agent
 ## Build Spec for Claude Code
 
 ---
 
 ## What we're building
 
-An autonomous agent that runs before every World Cup match, scrapes social media and news sentiment, compares it against TxLINE's opening odds, and generates a structured pre-match signal card — bullish, bearish, or neutral on each team. Cards are published to a public web dashboard and optionally pushed to a Telegram channel. The agent runs on a schedule with zero human input.
+An autonomous agent that runs before every World Cup match, scrapes social media and news sentiment, compares it against TxLINE's opening odds, and generates a structured pre-match signal card - bullish, bearish, or neutral on each team. Cards are published to a public web dashboard and optionally pushed to a Telegram channel. The agent runs on a schedule with zero human input.
 
 Submitted to the **Superteam × TxODDS World Cup Hackathon** under the **Trading Agents** track.
 
@@ -50,14 +50,14 @@ sentimentscout/
 ├── backend/
 │   ├── server.js             # Express API for dashboard
 │   └── routes/
-│       ├── signals.js        # GET /signals — all signal cards
-│       └── matches.js        # GET /matches — fixture list
+│       ├── signals.js        # GET /signals - all signal cards
+│       └── matches.js        # GET /matches - fixture list
 ├── frontend/
 │   ├── index.html            # Dashboard
 │   ├── app.js
 │   └── styles.css
 ├── db/
-│   └── signals.json          # Flat file DB (JSON) — no setup needed
+│   └── signals.json          # Flat file DB (JSON) - no setup needed
 ├── .env.example
 ├── package.json
 └── README.md
@@ -65,7 +65,7 @@ sentimentscout/
 
 ---
 
-## Agent pipeline — detailed spec
+## Agent pipeline - detailed spec
 
 ### Step 1: Fetch odds from TxLINE (`txline.js`)
 
@@ -84,25 +84,25 @@ Refer to TxLINE docs for exact endpoints: https://txline.txodds.com/documentatio
 
 Collect sentiment from three sources. Use web search via Claude's built-in web search tool or the `axios` + `cheerio` stack for scraping.
 
-**Source A — News headlines**
+**Source A - News headlines**
 - Query: `"[Team A] vs [Team B] World Cup 2026"` via a news search API
 - Options (pick one):
   - NewsAPI.org (free tier: 100 requests/day)
   - SerpApi Google News (free tier available)
   - Direct Google News RSS: `https://news.google.com/rss/search?q=[query]&hl=en`
 - Collect top 10 headlines + snippets published in last 48 hours
-- No need to scrape full articles — headlines + snippets are enough for sentiment
+- No need to scrape full articles - headlines + snippets are enough for sentiment
 
-**Source B — Reddit**
+**Source B - Reddit**
 - Subreddits: `r/worldcup`, `r/soccer`, `r/football`
 - Use Reddit JSON API (no auth needed for public posts):
   `https://www.reddit.com/r/worldcup/search.json?q=[Team A]+[Team B]&sort=new&limit=20`
 - Collect top 20 post titles + top comment snippets from last 24 hours
 
-**Source C — X/Twitter (optional, rate-limited)**
+**Source C - X/Twitter (optional, rate-limited)**
 - Use Twitter API v2 free tier if available
-- Query: `[Team A] OR [Team B] #WorldCup2026` — last 100 tweets
-- If Twitter API is unavailable or rate-limited: skip this source and note it in the README — the agent works fine with just news + Reddit
+- Query: `[Team A] OR [Team B] #WorldCup2026` - last 100 tweets
+- If Twitter API is unavailable or rate-limited: skip this source and note it in the README - the agent works fine with just news + Reddit
 
 **Output from scraper:** a single object per match:
 ```js
@@ -122,7 +122,7 @@ Single Claude API call per match with all sentiment data + TxLINE odds.
 
 System prompt:
 ```
-You are a sports betting analyst. Your job is to compare pre-match public sentiment with opening market odds to identify potential mismatches — cases where the crowd is significantly more or less confident than the market.
+You are a sports betting analyst. Your job is to compare pre-match public sentiment with opening market odds to identify potential mismatches - cases where the crowd is significantly more or less confident than the market.
 
 You will be given:
 - Opening odds for an upcoming World Cup match (with implied probabilities)
@@ -178,7 +178,7 @@ Parse response with `JSON.parse()`. If parsing fails, retry once, then log error
 
 ### Step 4: Store signal card (`db/signals.json`)
 
-Append to a flat JSON file — no database setup required for hackathon:
+Append to a flat JSON file - no database setup required for hackathon:
 
 ```json
 [
@@ -222,20 +222,20 @@ Use `node-cron` npm package.
 Two cron jobs:
 
 ```js
-// Run pipeline for upcoming matches — every hour, check if any match kicks off in ~2 hours
+// Run pipeline for upcoming matches - every hour, check if any match kicks off in ~2 hours
 cron.schedule('0 * * * *', runPreMatchPipeline)
 
-// Score completed matches — run 30 mins after each expected full time
+// Score completed matches - run 30 mins after each expected full time
 cron.schedule('30 * * * *', runPostMatchScorer)
 ```
 
 `runPreMatchPipeline`:
 1. Fetch all upcoming matches from TxLINE
 2. Filter for matches kicking off between 1h55m and 2h05m from now
-3. For each: run the full Step 1–5 pipeline
+3. For each: run the full Step 1-5 pipeline
 4. Log start/end + any errors
 
-Handle concurrent matches (multiple games on the same day) with `Promise.allSettled()` — run them in parallel, don't let one failure block others.
+Handle concurrent matches (multiple games on the same day) with `Promise.allSettled()` - run them in parallel, don't let one failure block others.
 
 ---
 
@@ -262,13 +262,13 @@ Simple stats bar:
 - Correct: N  |  Incorrect: N  |  Accuracy: X%
 
 **3. Past match cards**
-Same card layout as above but with outcome appended: "Brazil won 2–1 — signal was correct ✓"
+Same card layout as above but with outcome appended: "Brazil won 2-1 - signal was correct ✓"
 
 ---
 
 ## Visual design
 
-Clean, analytical aesthetic — this is a Trading Agents submission, not Fan Experiences, so it should look like a data tool.
+Clean, analytical aesthetic - this is a Trading Agents submission, not Fan Experiences, so it should look like a data tool.
 
 - White background, minimal colour
 - Signal badges:
@@ -294,8 +294,8 @@ Kickoff: 18:00 UTC
 Market: Brazil 47% | Draw 29% | France 31%
 
 Signal:
-🟢 Brazil — Bullish (sentiment > odds)
-🔴 France — Bearish (sentiment < odds)
+🟢 Brazil - Bullish (sentiment > odds)
+🔴 France - Bearish (sentiment < odds)
 
 ⚠️ Mismatch detected: Public strongly backing Brazil despite market pricing them as only slight favourites. Heavy news cycle around Mbappé injury rumours may be overweighted.
 
@@ -315,9 +315,9 @@ Use the same Telegram Bot API setup as PunditBot (separate bot token).
 
 ## Deployment
 
-- **Agent + backend:** Railway or Fly.io — needs a persistent process for cron jobs and SSE
+- **Agent + backend:** Railway or Fly.io - needs a persistent process for cron jobs and SSE
 - **Frontend:** Vercel or Netlify
-- Agent must be running continuously to catch pre-match windows — do not deploy to a platform that spins down on inactivity (Render free tier spins down after 15 mins)
+- Agent must be running continuously to catch pre-match windows - do not deploy to a platform that spins down on inactivity (Render free tier spins down after 15 mins)
 
 ---
 
@@ -337,13 +337,13 @@ PORT=3001
 
 ## Demo video plan (max 5 minutes)
 
-1. **0:00–0:30** — Open the dashboard. Show 2–3 signal cards for upcoming matches. Explain what bullish/bearish means in 10 seconds.
-2. **0:30–1:30** — Trigger the agent manually (add a `/run-now` endpoint for demo purposes) and show it running live in the terminal: TxLINE odds fetch → scraper → Claude API call → signal card appears on the dashboard.
-3. **1:30–2:30** — Open a signal card in detail. Read the sentiment summary. Show the mismatch explanation. Point out the key factors.
-4. **2:30–3:30** — Show the historical accuracy section. Even if only a few matches have completed, demonstrate that the scoring logic works — pull up a past card and show `signalCorrect: true/false`.
-5. **3:30–4:00** — (If Telegram enabled) Show the channel message arriving with the formatted signal.
-6. **4:00–4:30** — Show the `signals.json` file growing with each match — proves persistence and autonomous operation.
-7. **4:30–5:00** — Wrap: "Runs automatically before every one of the 104 World Cup matches. Zero human input. Sentiment meets market — every game."
+1. **0:00-0:30** - Open the dashboard. Show 2-3 signal cards for upcoming matches. Explain what bullish/bearish means in 10 seconds.
+2. **0:30-1:30** - Trigger the agent manually (add a `/run-now` endpoint for demo purposes) and show it running live in the terminal: TxLINE odds fetch → scraper → Claude API call → signal card appears on the dashboard.
+3. **1:30-2:30** - Open a signal card in detail. Read the sentiment summary. Show the mismatch explanation. Point out the key factors.
+4. **2:30-3:30** - Show the historical accuracy section. Even if only a few matches have completed, demonstrate that the scoring logic works - pull up a past card and show `signalCorrect: true/false`.
+5. **3:30-4:00** - (If Telegram enabled) Show the channel message arriving with the formatted signal.
+6. **4:00-4:30** - Show the `signals.json` file growing with each match - proves persistence and autonomous operation.
+7. **4:30-5:00** - Wrap: "Runs automatically before every one of the 104 World Cup matches. Zero human input. Sentiment meets market - every game."
 
 ---
 
@@ -373,11 +373,11 @@ PORT=3001
 
 ## Key decisions / notes for Claude Code
 
-- **Flat file DB is intentional** — `signals.json` requires zero setup and is easy to inspect during the demo. For production you'd use Postgres, but for 25 days of a tournament it's fine.
-- **Add a `/run-now?matchId=xxx` endpoint** for demo purposes — lets you trigger the pipeline on demand without waiting for the cron window. Remove or gate it before submitting.
-- **Google News RSS needs no API key** — start with that if NewsAPI rate limits are an issue: `https://news.google.com/rss/search?q=Brazil+France+World+Cup+2026&hl=en&gl=US&ceid=US:en`
-- **Reddit API needs a User-Agent header** — set `User-Agent: SentimentScout/1.0` on all requests or Reddit will 429 you.
-- **Twitter is optional** — don't block progress on it. The agent is fully functional with news + Reddit only. Add Twitter if you have API access and time.
-- **The accuracy tracker is a key judging signal** — it proves the agent is actually running autonomously over time, not just a one-shot demo. Make sure it's visually prominent on the dashboard.
-- **Confidence calibration:** instruct Claude to set `confidence: "low"` when fewer than 5 sentiment sources are found for a match. Some group stage games involving smaller nations will have thin coverage — better to flag low confidence than generate a spurious signal.
-- **Handle the no-mismatch case clearly** — most matches won't have a meaningful sentiment-odds gap. The dashboard should show these as "No significant signal" rather than hiding them. Showing the null case honestly makes the tool more credible to judges.
+- **Flat file DB is intentional** - `signals.json` requires zero setup and is easy to inspect during the demo. For production you'd use Postgres, but for 25 days of a tournament it's fine.
+- **Add a `/run-now?matchId=xxx` endpoint** for demo purposes - lets you trigger the pipeline on demand without waiting for the cron window. Remove or gate it before submitting.
+- **Google News RSS needs no API key** - start with that if NewsAPI rate limits are an issue: `https://news.google.com/rss/search?q=Brazil+France+World+Cup+2026&hl=en&gl=US&ceid=US:en`
+- **Reddit API needs a User-Agent header** - set `User-Agent: SentimentScout/1.0` on all requests or Reddit will 429 you.
+- **Twitter is optional** - don't block progress on it. The agent is fully functional with news + Reddit only. Add Twitter if you have API access and time.
+- **The accuracy tracker is a key judging signal** - it proves the agent is actually running autonomously over time, not just a one-shot demo. Make sure it's visually prominent on the dashboard.
+- **Confidence calibration:** instruct Claude to set `confidence: "low"` when fewer than 5 sentiment sources are found for a match. Some group stage games involving smaller nations will have thin coverage - better to flag low confidence than generate a spurious signal.
+- **Handle the no-mismatch case clearly** - most matches won't have a meaningful sentiment-odds gap. The dashboard should show these as "No significant signal" rather than hiding them. Showing the null case honestly makes the tool more credible to judges.

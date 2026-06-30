@@ -2,10 +2,10 @@ name = "sentimentscout"
 main = "src/worker.ts"
 compatibility_date = "2026-01-01"
 
-# Secrets (never commit) — set with:
+# Secrets (never commit) - set with:
 #   wrangler secret put TXLINE_API_KEY
 #   wrangler secret put ANTHROPIC_API_KEY   # for the Claude sentiment analysis
-# (No Container — a 15-minute cron runs the pre-match pipeline + post-match scorer.
+# (No Container - a 15-minute cron runs the pre-match pipeline + post-match scorer.
 #  News via Google News RSS and Reddit JSON need no keys.)
 
 [assets]

@@ -1,4 +1,4 @@
-# SentimentScout — Submission Checklist
+# SentimentScout - Submission Checklist
 
 Track: **Trading Tools & Agents** (Superteam × TxODDS World Cup Hackathon)
 Live: https://sentimentscout.catchspider2002.workers.dev · Repo: https://github.com/catchspider2002/sentimentscout
@@ -20,7 +20,7 @@ Live: https://sentimentscout.catchspider2002.workers.dev · Repo: https://github
 - [ ] **Let it run** so cards generate in the ~2h pre-kickoff windows (or use Run now)
 - [ ] **Record demo video** (≤5 min): Run now, show a signal card + mismatch banner + a scored past card
 - [ ] **Add demo video link** to README + submission form
-- [ ] **Push final code to GitHub** — confirm latest commit; verify `.dev.vars` is NOT committed
+- [ ] **Push final code to GitHub** - confirm latest commit; verify `.dev.vars` is NOT committed
 - [ ] **Gate or remove `/api/run-now`** before final submission
 - [ ] **Fill submission form**: live URL, GitHub URL, video URL, TxLINE endpoints used, API feedback
 - [ ] Attach custom domain `sentiment.<domain>` (optional)

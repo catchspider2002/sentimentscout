@@ -1,4 +1,4 @@
-// SentimentScout — Worker. Pre-match sentiment pipeline (cron) + scorer + dashboard API.
+// SentimentScout - Worker. Pre-match sentiment pipeline (cron) + scorer + dashboard API.
 import { listFixtures, getOdds, getOutcome, TxEnv } from './txline';
 import { collect } from './scraper';
 import { analyse, Signal } from './analyser';

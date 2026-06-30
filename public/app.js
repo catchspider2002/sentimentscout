@@ -16,7 +16,7 @@ async function loadAccuracy() {
   try {
     const a = await api('/api/accuracy');
     qs('#a-total').textContent = a.totalSignals; qs('#a-dir').textContent = a.directional;
-    qs('#a-correct').textContent = a.correct; qs('#a-acc').textContent = a.accuracy == null ? '—' : a.accuracy + '%';
+    qs('#a-correct').textContent = a.correct; qs('#a-acc').textContent = a.accuracy == null ? '-' : a.accuracy + '%';
   } catch {}
 }
 
@@ -30,12 +30,12 @@ async function loadCards() {
       const odds = s.odds || {};
       const factors = (sig.keyFactors || []).map((f) => `<li>${esc(f)}</li>`).join('');
       const outcome = s.correct == null ? (s.outcome ? `<div class="outcome muted">Result: ${s.outcome.replace('_', ' ')}</div>` : '')
-        : `<div class="outcome ${s.correct ? 'ok' : 'no'}">${s.outcome.replace('_', ' ')} — signal ${s.correct ? 'correct ✓' : 'incorrect ✗'}</div>`;
+        : `<div class="outcome ${s.correct ? 'ok' : 'no'}">${s.outcome.replace('_', ' ')} - signal ${s.correct ? 'correct ✓' : 'incorrect ✗'}</div>`;
       return `<div class="card"><div class="top"><span class="match">${esc(s.home)} vs ${esc(s.away)}</span><span class="when">${when(s.kickoff)}</span></div>` +
         `<div class="badges"><span class="badge ${cls(sig.homeSignal)}">${esc(s.home)}: ${sig.homeSignal || 'neutral'}</span>` +
         `<span class="badge ${cls(sig.awaySignal)}">${esc(s.away)}: ${sig.awaySignal || 'neutral'}</span>` +
         `<span class="badge conf">${sig.confidence || 'low'} confidence</span></div>` +
-        (sig.mismatch ? `<div class="mismatch">⚠️ ${esc(sig.mismatchExplanation || 'Sentiment–odds gap detected')}</div>` : '') +
+        (sig.mismatch ? `<div class="mismatch">⚠️ ${esc(sig.mismatchExplanation || 'Sentiment-odds gap detected')}</div>` : '') +
         `<div class="summary">${esc(sig.sentimentSummary || '')}</div>` +
         (factors ? `<ul class="factors">${factors}</ul>` : '') +
         `<div class="odds">Market: ${pct(odds.home)} / draw ${pct(odds.draw)} / ${pct(odds.away)} · ${s.sources} sources</div>` +
@@ -43,4 +43,4 @@ async function loadCards() {
     }).join('');
   } catch {}
 }
-function pct(x) { return x == null ? '—' : (x * 100).toFixed(0) + '%'; }
+function pct(x) { return x == null ? '-' : (x * 100).toFixed(0) + '%'; }

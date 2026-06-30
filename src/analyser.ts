@@ -1,8 +1,8 @@
-// SentimentScout — Claude analysis: compare public sentiment to opening odds → signal card.
+// SentimentScout - Claude analysis: compare public sentiment to opening odds → signal card.
 import { Implied } from './txline';
 import { Sentiment } from './scraper';
 
-const SYSTEM = `You are a sports betting analyst. Your job is to compare pre-match public sentiment with opening market odds to identify potential mismatches — cases where the crowd is significantly more or less confident than the market.
+const SYSTEM = `You are a sports betting analyst. Your job is to compare pre-match public sentiment with opening market odds to identify potential mismatches - cases where the crowd is significantly more or less confident than the market.
 
 You will be given opening odds (with implied probabilities) and a collection of news headlines and Reddit posts about the match.
 
