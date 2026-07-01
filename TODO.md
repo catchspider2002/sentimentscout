@@ -21,7 +21,8 @@ Live: https://sentimentscout.catchspider2002.workers.dev · Repo: https://github
 - [ ] **Record demo video** (≤5 min): Run now, show a signal card + mismatch banner + a scored past card
 - [ ] **Add demo video link** to README + submission form
 - [ ] **Push final code to GitHub** - confirm latest commit; verify `.dev.vars` is NOT committed
-- [ ] **Gate or remove `/api/run-now`** before final submission
+- [x] **Gated `/api/run-now`** behind `ADMIN_KEY` (403 without it); dashboard button hidden unless opened with `?admin=KEY`
+- [ ] **Set `ADMIN_KEY`**: `wrangler secret put ADMIN_KEY` (required to use the "Run now" button)
 - [ ] **Fill submission form**: live URL, GitHub URL, video URL, TxLINE endpoints used, API feedback
 - [ ] Attach custom domain `sentiment.<domain>` (optional)
 

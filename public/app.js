@@ -7,9 +7,26 @@ const when = (t) => { try { return new Date(t < 1e12 ? t * 1000 : t).toLocaleStr
 
 init();
 function init() {
-  qs('#run').addEventListener('click', async () => { qs('#run').textContent = 'Running…'; try { await api('/api/run-now', { method: 'POST' }); } catch {} qs('#run').textContent = 'Run now'; refresh(); });
+  setupRun('Running…', 'Run now');
   refresh(); setInterval(refresh, 20000);
 }
+// "Run now" is an admin/demo affordance: hidden for normal visitors, revealed with ?admin=KEY
+// (stored locally). The key is sent as X-Admin-Key; the gated /api/run-now rejects anything else.
+function setupRun(busy, idle) {
+  const btn = qs('#run'); if (!btn) return;
+  const u = new URL(location.href);
+  let key = u.searchParams.get('admin');
+  if (key) { try { localStorage.setItem('admin_key', key); } catch {} history.replaceState(null, '', u.pathname); }
+  if (!key) { try { key = localStorage.getItem('admin_key'); } catch {} }
+  if (!key) { btn.style.display = 'none'; return; }
+  btn.addEventListener('click', async () => {
+    btn.textContent = busy;
+    try { await api('/api/run-now', { method: 'POST', headers: { 'X-Admin-Key': key } }); }
+    catch (e) { alert('Run failed: ' + (e.message || e)); }
+    btn.textContent = idle; refresh();
+  });
+}
+
 async function refresh() { await Promise.all([loadAccuracy(), loadCards()]); }
 
 async function loadAccuracy() {

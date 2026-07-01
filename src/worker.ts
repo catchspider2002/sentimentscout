@@ -3,7 +3,7 @@ import { listFixtures, getOdds, getOutcome, TxEnv } from './txline';
 import { collect } from './scraper';
 import { analyse, Signal } from './analyser';
 
-export interface Env { DB: D1Database; ASSETS: Fetcher; TXLINE_API_KEY?: string; ANTHROPIC_API_KEY?: string }
+export interface Env { DB: D1Database; ASSETS: Fetcher; TXLINE_API_KEY?: string; ANTHROPIC_API_KEY?: string; ADMIN_KEY?: string }
 
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' };
 const json = (d: unknown, s = 200) => new Response(JSON.stringify(d), { status: s, headers: { 'Content-Type': 'application/json', ...CORS } });
@@ -20,7 +20,10 @@ export default {
         return json({ signals: (r.results || []).map((s) => ({ matchId: s.match_id, home: s.home_team, away: s.away_team, kickoff: s.kickoff, odds: parse(s.odds_json), signal: parse(s.signal_json), sources: s.sources_n, outcome: s.outcome, correct: s.signal_correct })) });
       }
       if (path === '/api/accuracy' && req.method === 'GET') return json(await accuracy(env));
-      if (path === '/api/run-now' && req.method === 'POST') return json({ ok: true, ...(await runCron(env)) });
+      if (path === '/api/run-now' && req.method === 'POST') {
+        if (!env.ADMIN_KEY || req.headers.get('X-Admin-Key') !== env.ADMIN_KEY) return json({ error: 'forbidden' }, 403);
+        return json({ ok: true, ...(await runCron(env)) });
+      }
       return json({ error: 'not found' }, 404);
     } catch (e) { return json({ error: String((e as Error).message || e) }, 500); }
   },

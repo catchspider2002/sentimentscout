@@ -30,7 +30,7 @@ npm run deploy
 
 ## Demo
 
-- `POST /api/run-now` (or the **Run now** button) runs the pipeline immediately instead of waiting for the cron window - generates signal cards for matches ~2h out and scores any finished ones.
+- `POST /api/run-now` runs the pipeline immediately instead of waiting for the cron window — generates signal cards for matches ~2h out and scores any finished ones. Admin-gated (see Notes); the **Run now** button appears when you open the dashboard with `?admin=YOUR_ADMIN_KEY`.
 - Cards show the per-team signal, a mismatch banner when sentiment and odds diverge, key factors, confidence, the market odds, and (post-match) whether the signal was correct.
 
 ## API
@@ -39,11 +39,11 @@ npm run deploy
 |---|---|---|
 | GET | `/api/signals` | all signal cards (newest kickoff first) |
 | GET | `/api/accuracy` | directional accuracy |
-| POST | `/api/run-now` | run the pipeline now (gate before submitting) |
+| POST | `/api/run-now` | run the pipeline now — **requires `X-Admin-Key: $ADMIN_KEY`** (403 otherwise) |
 
 ## Notes / limitations (hackathon scope)
 
 - Sentiment is news headlines + Reddit titles; Twitter is skipped (API friction). Thin coverage → low confidence, surfaced honestly.
 - One signal per match (generated once in the ~2h pre-kickoff window).
-- `/api/run-now` is open for the demo - gate before final submission.
-- A wallet connect can be added to satisfy the Solana sign-up requirement.
+- `/api/run-now` is **gated behind `ADMIN_KEY`** (403 without the `X-Admin-Key` header). The "Run now" button is hidden for normal visitors and appears only when you open the page with `?admin=YOUR_ADMIN_KEY` (stored locally thereafter). The scheduled cron needs no key. Set it with `wrangler secret put ADMIN_KEY`.
+- No in-app wallet needed: the Solana "sign up" is the TxODDS on-chain data subscription (one-time), and the on-chain angle here is data provenance via TxLINE's audit trail.
