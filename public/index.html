@@ -1,25 +1,47 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="Compares public sentiment against opening odds before each match and flags mismatches where the crowd and market disagree." />
   <title>SentimentScout - Pre-Match Sentiment Signals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="/styles.css" />
 </head>
+
 <body>
   <header class="topbar"><span class="brand">SentimentScout</span><button id="run" class="btn">Run now</button></header>
   <main class="wrap">
-    <p class="tagline muted">Compares public sentiment (news + Reddit) against opening odds before each match and flags mismatches - where the crowd and the market disagree. Powered by TxLINE.</p>
+    <p class="tagline muted">Compares public sentiment (news + Reddit) against opening odds before each match and flags
+      mismatches - where the crowd and the market disagree. Powered by TxLINE.</p>
 
     <section class="acc-bar">
-      <div class="stat"><div id="a-total" class="num">0</div><div class="lbl">Signals</div></div>
-      <div class="stat"><div id="a-dir" class="num">0</div><div class="lbl">Directional</div></div>
-      <div class="stat"><div id="a-correct" class="num">0</div><div class="lbl">Correct</div></div>
-      <div class="stat"><div id="a-acc" class="num">-</div><div class="lbl">Accuracy</div></div>
+      <div class="stat">
+        <div id="a-total" class="num">0</div>
+        <div class="lbl">Signals</div>
+      </div>
+      <div class="stat">
+        <div id="a-dir" class="num">0</div>
+        <div class="lbl">Directional</div>
+      </div>
+      <div class="stat">
+        <div id="a-correct" class="num">0</div>
+        <div class="lbl">Correct</div>
+      </div>
+      <div class="stat">
+        <div id="a-acc" class="num">-</div>
+        <div class="lbl">Accuracy</div>
+      </div>
     </section>
 
-    <div id="cards"><p class="muted">No signal cards yet. They generate ~2 hours before each kickoff (or hit Run now).</p></div>
+    <div id="cards">
+      <p class="muted">No signal cards yet. They generate ~2 hours before each kickoff (or hit Run now).</p>
+    </div>
   </main>
   <script src="/app.js"></script>
 </body>
+
 </html>
