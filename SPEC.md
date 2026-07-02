@@ -326,7 +326,7 @@ Use the same Telegram Bot API setup as PunditBot (separate bot token).
 ```
 TXLINE_API_KEY=your_txline_key
 TXLINE_BASE_URL=https://txline.txodds.com
-ANTHROPIC_API_KEY=your_anthropic_key
+DEEPINFRA_API_KEY="your_deepinfra_key"
 NEWS_API_KEY=your_newsapi_key         # newsapi.org
 TELEGRAM_BOT_TOKEN=your_token        # optional, for channel posts
 TELEGRAM_CHANNEL_ID=@SentimentScoutWC  # optional

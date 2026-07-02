@@ -16,7 +16,7 @@ Live: https://sentimentscout.catchspider2002.workers.dev · Repo: https://github
 
 ## ⏳ Before submitting
 
-- [ ] **Add `ANTHROPIC_API_KEY`**: `wrangler secret put ANTHROPIC_API_KEY` (Claude analysis; deterministic fallback without it)
+- [ ] **Add `DEEPINFRA_API_KEY`**: `wrangler secret put DEEPINFRA_API_KEY` (LLM analysis; deterministic fallback without it)
 - [ ] **Let it run** so cards generate in the ~2h pre-kickoff windows (or use Run now)
 - [ ] **Record demo video** (≤5 min): Run now, show a signal card + mismatch banner + a scored past card
 - [ ] **Add demo video link** to README + submission form

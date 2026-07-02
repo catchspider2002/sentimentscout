@@ -1,6 +1,7 @@
-// SentimentScout - Claude analysis: compare public sentiment to opening odds → signal card.
+// SentimentScout - DeepInfra analysis: compare public sentiment to opening odds → signal card.
 import { Implied } from './txline';
 import { Sentiment } from './scraper';
+import { chat } from './llm';
 
 const SYSTEM = `You are a sports betting analyst. Your job is to compare pre-match public sentiment with opening market odds to identify potential mismatches - cases where the crowd is significantly more or less confident than the market.
 
@@ -43,14 +44,8 @@ export async function analyse(apiKey: string | undefined, home: string, away: st
   const user = { match: { home, away }, odds, sentiment: { newsHeadlines: sentiment.newsHeadlines, redditPosts: sentiment.redditPosts } };
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 500, system: SYSTEM, messages: [{ role: 'user', content: JSON.stringify(user) }] }),
-      });
-      if (!res.ok) continue;
-      const data = await res.json() as { content?: { text?: string }[] };
-      const text = data.content?.[0]?.text?.trim() || '';
+      const text = await chat(apiKey, { system: SYSTEM, user: JSON.stringify(user), maxTokens: 500 });
+      if (!text) continue;
       const parsed = JSON.parse(text.replace(/^```json\s*|\s*```$/g, '')) as Signal;
       if (sentiment.sources < 5) parsed.confidence = 'low';
       return parsed;

@@ -3,7 +3,7 @@ import { listFixtures, getOdds, getOutcome, TxEnv } from './txline';
 import { collect } from './scraper';
 import { analyse, Signal } from './analyser';
 
-export interface Env { DB: D1Database; ASSETS: Fetcher; TXLINE_API_KEY?: string; ANTHROPIC_API_KEY?: string; ADMIN_KEY?: string }
+export interface Env { DB: D1Database; ASSETS: Fetcher; TXLINE_API_KEY?: string; DEEPINFRA_API_KEY?: string; ADMIN_KEY?: string }
 
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' };
 const json = (d: unknown, s = 200) => new Response(JSON.stringify(d), { status: s, headers: { 'Content-Type': 'application/json', ...CORS } });
@@ -46,7 +46,7 @@ async function runCron(env: Env): Promise<{ generated: number; scored: number }>
     const odds = await getOdds(txenv, f.fixtureId);
     if (!odds) continue;
     const sentiment = await collect(f.home, f.away);
-    const signal = await analyse(env.ANTHROPIC_API_KEY, f.home, f.away, odds, sentiment);
+    const signal = await analyse(env.DEEPINFRA_API_KEY, f.home, f.away, odds, sentiment);
     await env.DB.prepare('INSERT OR IGNORE INTO signals (match_id,home_team,away_team,kickoff,generated_at,odds_json,signal_json,sources_n) VALUES (?,?,?,?,?,?,?,?)')
       .bind(String(f.fixtureId), f.home, f.away, f.startTime, now, JSON.stringify(odds), JSON.stringify(signal), sentiment.sources).run();
     generated++;

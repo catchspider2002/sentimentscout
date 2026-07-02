@@ -14,7 +14,7 @@ Pure **Workers + Cron + D1 + Claude** - no Container. A 15-minute cron runs the 
 | cron scheduler (2h pre-match + scorer) | one Worker `scheduled` cron `*/15 * * * *` → `runCron()` |
 | `txline.js` (odds + fixtures) | `src/txline.ts` - auth + fixtures + `getOdds` (demargined `Pct`) + `getOutcome` |
 | `scraper.js` (news + Reddit + Twitter) | `src/scraper.ts` - Google News RSS + Reddit JSON server-side (Twitter skipped) |
-| `analyser.js` (Claude → signal JSON) | `src/analyser.ts` - `claude-sonnet-4-6`, strict JSON, 1 retry, deterministic fallback |
+| `analyser.js` (DeepInfra → signal JSON) | `src/analyser.ts` + `src/llm.ts` - strict JSON, 1 retry, deterministic fallback |
 | `db/signals.json` | **D1** `signals` (+ `kv`) |
 | `scorer.js` (post-match) | `runCron()` scores finished matches (mismatch = directional) |
 | dashboard | `./public` via `[assets]` - accuracy bar + signal cards (mismatch banner, key factors, confidence, outcome) |
@@ -40,7 +40,7 @@ database_name = "sentimentscout"
 database_id = "REPLACE_WITH_D1_ID"
 ```
 
-Secrets: `TXLINE_API_KEY` (required), `ANTHROPIC_API_KEY` (recommended - Claude analysis). News/Reddit need no keys.
+Secrets: `TXLINE_API_KEY` (required), `DEEPINFRA_API_KEY` (recommended - LLM analysis). News/Reddit need no keys.
 
 ## Deploy
 
@@ -49,7 +49,7 @@ npm install && wrangler login
 wrangler d1 create sentimentscout       # paste id into wrangler.toml
 npm run db:init:remote
 wrangler secret put TXLINE_API_KEY
-wrangler secret put ANTHROPIC_API_KEY
+wrangler secret put DEEPINFRA_API_KEY
 npm run deploy
 ```
 
